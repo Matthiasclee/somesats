@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Gift cards</h1>
+
+<div id="gift_cards">
+  <% @gift_cards.each do |gift_card| %>
+    <%= render gift_card %>
+    <p>
+      <%= link_to "Show this gift card", gift_card %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New gift card", new_gift_card_path %>

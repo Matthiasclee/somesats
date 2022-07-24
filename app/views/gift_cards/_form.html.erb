@@ -1,0 +1,27 @@
+<%= form_with(model: gift_card) do |form| %>
+  <% if gift_card.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+
+      <ul>
+        <% gift_card.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :sats, style: "display: block" %>
+    <%= form.number_field :sats %>
+  </div>
+
+  <div>
+    <%= form.label :id, style: "display: block" %>
+    <%= form.text_field :id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
