@@ -1,12 +1,36 @@
 <div id="<%= dom_id gift_card %>">
   <p>
-    <strong>Sats:</strong>
-    <%= gift_card.sats %>
+    <strong>Gift card ID:</strong>
+    <%= gift_card.id %>
+    <strong>Redemption Code:</strong>
+    <%= gift_card.redemption_code %>
+  </p>
+
+  <% if gift_card.expired? %>
+    <b style="color:red">
+      This card is expired.
+    </b>  
+  <% end %>
+
+  <% if !gift_card.paid %>
+    <b style="color:red">
+      This card has not been loaded with enough bitcoin yet. Click <%= link_to "here", gift_cards_pay_path(gift_card) %> to load it.
+    </b>  
+  <% end %>
+
+  <p>
+    <strong>Expires:</strong>
+    <%= Time.at(gift_card.created_at.to_i + gift_card.valid_for.to_i).to_datetime.strftime("%h %d, %Y %l:%M %p %:z") %>
   </p>
 
   <p>
-    <strong>Id:</strong>
-    <%= gift_card.id %>
+    <strong>Starting Balance:</strong>
+    ₿<%= "%.8f" % (gift_card.starting_sats.to_f/100000000) %> • <%= gift_card.starting_sats %> sats
+  </p>
+
+  <p>
+    <strong>Balance:</strong>
+    ₿<%= "%.8f" % (gift_card.sats.to_f/100000000) %> • <%= gift_card.sats %> sats
   </p>
 
 </div>

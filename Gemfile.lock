@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/lian/bitcoin-ruby
+  revision: f9b817c946b3ef99c7652c318c155200aadc6489
+  branch: master
+  specs:
+    bitcoin-ruby (0.0.20)
+      eventmachine
+      ffi
+      scrypt
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -82,6 +92,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (4.1.0)
+    chunky_png (1.4.0)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     cssbundling-rails (1.1.1)
@@ -91,6 +102,11 @@ GEM
       reline (>= 0.3.1)
     digest (3.1.0)
     erubi (1.10.0)
+    eventmachine (1.2.7)
+    ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -103,6 +119,7 @@ GEM
       activesupport (>= 5.0.0)
     jsbundling-rails (1.0.3)
       railties (>= 6.0.0)
+    json (2.6.2)
     loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -170,7 +187,13 @@ GEM
     reline (0.3.1)
       io-console (~> 0.5)
     rexml (3.2.5)
+    rqrcode (2.1.1)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     rubyzip (2.3.2)
+    scrypt (3.0.7)
+      ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (4.3.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -215,15 +238,18 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  bitcoin-ruby!
   bootsnap
   capybara
   cssbundling-rails
   debug
   jbuilder
   jsbundling-rails
+  json
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.3)
+  rqrcode (~> 2.0)
   selenium-webdriver
   sprockets-rails
   stimulus-rails

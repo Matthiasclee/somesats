@@ -1,10 +1,8 @@
-class GiftCardsController < ApplicationController
-  before_action :set_gift_card, only: %i[ show edit update destroy ]
+require "net/http"
 
-  # GET /gift_cards or /gift_cards.json
-  def index
-    @gift_cards = GiftCard.all
-  end
+class GiftCardsController < ApplicationController
+  before_action :set_gift_card, only: %i[ show pay confirm_payment ]
+  FEE=2
 
   # GET /gift_cards/1 or /gift_cards/1.json
   def show
@@ -15,13 +13,13 @@ class GiftCardsController < ApplicationController
     @gift_card = GiftCard.new
   end
 
-  # GET /gift_cards/1/edit
-  def edit
-  end
-
   # POST /gift_cards or /gift_cards.json
   def create
     @gift_card = GiftCard.new(gift_card_params)
+    @gift_card.valid_for = 1.year.to_i
+    @gift_card.redemption_code = SecureRandom.uuid
+    @gift_card.sats = 0
+    @gift_card.payment_key = ::Bitcoin::Key.generate.to_base58
 
     respond_to do |format|
       if @gift_card.save
@@ -34,26 +32,27 @@ class GiftCardsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /gift_cards/1 or /gift_cards/1.json
-  def update
-    respond_to do |format|
-      if @gift_card.update(gift_card_params)
-        format.html { redirect_to gift_card_url(@gift_card), notice: "Gift card was successfully updated." }
-        format.json { render :show, status: :ok, location: @gift_card }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @gift_card.errors, status: :unprocessable_entity }
-      end
-    end
+  def pay
+    @address = ::Bitcoin::Key.from_base58(@gift_card.payment_key).addr
+    resp = Net::HTTP.get(URI("https://blockchain.info/balance?active=#{@address}"))
+    @balance = JSON.parse(resp)[@address]["final_balance"].to_i
+    @unpaid_balance = (@gift_card.starting_sats+(@gift_card.starting_sats/(100.0/FEE))).to_i - @balance
   end
 
-  # DELETE /gift_cards/1 or /gift_cards/1.json
-  def destroy
-    @gift_card.destroy
+  def confirm_payment
+    @address = ::Bitcoin::Key.from_base58(@gift_card.payment_key).addr
+    resp = Net::HTTP.get(URI("https://blockchain.info/balance?active=#{@address}"))
+    @balance = JSON.parse(resp)[@address]["final_balance"].to_i
+    @unpaid_balance = (@gift_card.starting_sats+(@gift_card.starting_sats/(100.0/FEE))).to_i - @balance
+    
+    if @unpaid_balance < 1
+      @gift_card.paid = true
+      @gift_card.sats = @gift_card.starting_sats
+      @gift_card.save
 
-    respond_to do |format|
-      format.html { redirect_to gift_cards_url, notice: "Gift card was successfully destroyed." }
-      format.json { head :no_content }
+      redirect_to gift_card_url(@gift_card)
+    else
+      redirect_to gift_cards_pay_path(@gift_card)
     end
   end
 
@@ -65,6 +64,6 @@ class GiftCardsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def gift_card_params
-      params.require(:gift_card).permit(:sats, :id)
+      params.require(:gift_card).permit(:starting_sats)
     end
 end

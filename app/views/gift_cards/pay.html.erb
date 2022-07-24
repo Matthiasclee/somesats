@@ -1,0 +1,20 @@
+<h2>Load gift card <%= @gift_card.id[0..2] %>..<%= @gift_card.id[-3..-1] %></h2>
+
+<p>
+  <strong>Unpaid balance:</strong>
+  ₿<%= "%.8f" % (@unpaid_balance.to_f/100000000) %> • <%= @unpaid_balance %> sats
+</p>
+
+<p>Pay ₿<%= "%.8f" % (@unpaid_balance.to_f/100000000) %> or <%= @unpaid_balance %> sats to <%= link_to @address, "bitcoin:#{@address}" %> <%= link_to "I paid", gift_cards_payment_confirm_path(@gift_card) %></p>
+
+<%=
+  qrcode = RQRCode::QRCode.new("bitcoin:#{@address}?amount=#{@unpaid_balance.to_f/100000000}")
+
+  qrcode.as_svg(
+    color: "000",
+    shape_rendering: "crispEdges",
+    module_size: 9,
+    standalone: true,
+    use_path: true
+  ).html_safe
+%>
