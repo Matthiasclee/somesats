@@ -8,6 +8,7 @@ gem "rails", "~> 7.0.3"
 gem 'bitcoin-ruby', git: 'https://github.com/lian/bitcoin-ruby', branch: 'master', require: 'bitcoin'
 gem "rqrcode", "~> 2.0"
 gem "json"
+gem "base64"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"

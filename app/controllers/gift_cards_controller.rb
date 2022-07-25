@@ -6,6 +6,13 @@ class GiftCardsController < ApplicationController
 
   # GET /gift_cards/1 or /gift_cards/1.json
   def show
+    @show_redemption_code = true if params[:redemption_code] == @gift_card.redemption_code
+    
+    if params[:print] == "true"
+      @btc_logo = File.read(Rails.root.join("public", "btc_logo_base64"))
+      render partial: "card", layout: false
+      return
+    end
   end
 
   # GET /gift_cards/new
@@ -23,7 +30,7 @@ class GiftCardsController < ApplicationController
 
     respond_to do |format|
       if @gift_card.save
-        format.html { redirect_to gift_card_url(@gift_card), notice: "Gift card was successfully created." }
+        format.html { redirect_to gift_card_url(@gift_card) + "?redemption_code=#{@gift_card.redemption_code}", notice: "Gift card was successfully created." }
         format.json { render :show, status: :created, location: @gift_card }
       else
         format.html { render :new, status: :unprocessable_entity }

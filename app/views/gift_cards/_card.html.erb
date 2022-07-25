@@ -1,0 +1,59 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+<div class="card mb-3" style="width: 3.5in;height:2in">
+  <b class="card-header" style="text-align:center;">Bitcoin Card</b>
+  <div class="row g-0" style="height: 100%;">
+    <div class="col-md-2" style="height: 100%;">
+      <table style="height: 100%;">
+        <tbody>
+          <tr>
+            <td class="align-middle"><img style="background-color:black;border-radius:100%" src="<%= @btc_logo %>" class="img-fluid"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-7">
+      <div class="card-body" style="height: 100%">
+        <h6 class="card-title" style="white-space:nowrap">
+          ₿<%= "%.8f" % (@gift_card.starting_sats.to_f/100000000) %> • <%= @gift_card.starting_sats %> sats
+        </h6>
+        <p class="card-text">
+          To redeem your bitcoin, scan the QR code on the right.
+        </p>
+
+        <small class="text-muted" style="position:absolute;bottom:6">
+          Redeem before <%= Time.at(@gift_card.created_at.to_i + @gift_card.valid_for.to_i).to_datetime.strftime("%m/%d/%y") %>
+        </small>
+      </div>
+    </div>
+
+    <div class="col-md-3" style="height: 100%;">
+      <table style="height: 100%;">
+        <tbody>
+          <tr>
+            <%
+              qrcode = RQRCode::QRCode.new(@gift_card.redemption_code)
+
+              png = qrcode.as_png(
+                bit_depth: 1,
+                border_modules: 1,
+                color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+                color: "black",
+                file: nil,
+                fill: "white",
+                module_px_size: 6,
+                resize_exactly_to: false,
+                resize_gte_to: false,
+                size: 160
+              )
+
+              png_base64 = Base64.encode64(png.to_s)
+            %>
+            <td class="align-middle"><img style="border-radius:5px;border: 2px solid black;width: 90%;" src="data:image/png;base64,<%= png_base64 %>" class="img-fluid"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -2,8 +2,13 @@
   <p>
     <strong>Gift card ID:</strong>
     <%= gift_card.id %>
-    <strong>Redemption Code:</strong>
-    <%= gift_card.redemption_code %>
+
+    <% if @show_redemption_code %>
+      <strong>Redemption Code:</strong>
+      <%= gift_card.redemption_code %>
+
+      <%= link_to "Print card", gift_card_url(gift_card) + "?redemption_code=#{gift_card.redemption_code}&print=true" %>
+    <% end %>
   </p>
 
   <% if gift_card.expired? %>
