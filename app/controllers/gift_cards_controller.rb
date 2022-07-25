@@ -23,7 +23,7 @@ class GiftCardsController < ApplicationController
   # POST /gift_cards or /gift_cards.json
   def create
     @gift_card = GiftCard.new(gift_card_params)
-    @gift_card.valid_for = 1.year.to_i
+    @gift_card.valid_for = 3.years.to_i + 6.months.to_i
     @gift_card.redemption_code = SecureRandom.uuid
     @gift_card.sats = 0
     @gift_card.payment_key = ::Bitcoin::Key.generate.to_base58
