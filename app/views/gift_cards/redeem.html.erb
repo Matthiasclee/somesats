@@ -1,0 +1,9 @@
+<% if @redemption_code %>
+  <h2>Redeem gift card</h2>
+  <p><strong>Balance: </strong>₿<%= ("%.8f" % (@gift_card.starting_sats.to_f/100000000)).sub(/0*$/,"") %> • <%= @gift_card.starting_sats %> sats</p>
+<% else %>
+  <%= form_with(url:controller.url_for,method: :get) do |form| %>
+    <%= form.label :redemption_code %>
+    <%= form.text_field :redemption_code %>
+  <% end %>
+<% end %>
