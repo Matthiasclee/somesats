@@ -16,7 +16,7 @@
     <div class="col-md-7">
       <div class="card-body" style="height: 100%">
         <h6 class="card-title" style="white-space:nowrap">
-          ₿<%= "%.8f" % (@gift_card.starting_sats.to_f/100000000) %> • <%= @gift_card.starting_sats %> sats
+          ₿<%= ("%.8f" % (@gift_card.starting_sats.to_f/100000000)).sub(/0*$/,"") %> • <%= @gift_card.starting_sats %> sats
         </h6>
         <p class="card-text">
           To redeem your bitcoin, scan the QR code on the right.
