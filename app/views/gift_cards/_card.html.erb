@@ -1,7 +1,12 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
 <div class="card mb-3" style="width: 3.5in;height:2in">
-  <b class="card-header" style="text-align:center;">Bitcoin Card</b>
+  <div class="card-header" style="text-align:center;">
+    <b>Bitcoin Card</b>
+    <small class="text-muted" style="">
+      Redeem before <%= Time.at(@gift_card.created_at.to_i + @gift_card.valid_for.to_i).to_datetime.strftime("%m/%d/%y") %>
+    </small>
+  </div>
   <div class="row g-0" style="height: 100%;">
     <div class="col-md-2" style="height: 100%;">
       <table style="height: 100%;">
@@ -11,6 +16,9 @@
           </tr>
         </tbody>
       </table>
+      <small class="text-muted" style="position:absolute;bottom:0;white-space:nowrap">
+        ID: <i><%= @gift_card.id %></i>
+      </small>
     </div>
 
     <div class="col-md-7">
@@ -18,12 +26,8 @@
         <h6 class="card-title" style="white-space:nowrap">
           ₿<%= ("%.8f" % (@gift_card.starting_sats.to_f/100000000)).sub(/0*$/,"") %> • <%= @gift_card.starting_sats %> sats
         </h6>
-        <p class="card-text">
+        <small class="card-text">
           To redeem your bitcoin, scan the QR code on the right.
-        </p>
-
-        <small class="text-muted" style="position:absolute;bottom:6">
-          Redeem before <%= Time.at(@gift_card.created_at.to_i + @gift_card.valid_for.to_i).to_datetime.strftime("%m/%d/%y") %>
         </small>
       </div>
     </div>
