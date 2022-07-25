@@ -16,8 +16,8 @@
           </tr>
         </tbody>
       </table>
-      <small class="text-muted" style="position:absolute;bottom:0;white-space:nowrap">
-        ID: <i><%= @gift_card.id %></i>
+      <small class="text-muted" style="position:absolute;bottom:0;left:5;white-space:nowrap;font-size:5px;">
+        ID: <i><%= @gift_card.id %></i> • Redemption Code: <i><%= @gift_card.redemption_code %></i>
       </small>
     </div>
 
@@ -37,7 +37,7 @@
         <tbody>
           <tr>
             <%
-              qrcode = RQRCode::QRCode.new(@gift_card.redemption_code)
+              qrcode = RQRCode::QRCode.new("#{request.protocol}#{request.host}:#{request.port}"+gift_cards_redeem_path(@gift_card) + "?redemption_code=#{@gift_card.redemption_code}", level: :l)
 
               png = qrcode.as_png(
                 bit_depth: 1,
@@ -49,7 +49,7 @@
                 module_px_size: 6,
                 resize_exactly_to: false,
                 resize_gte_to: false,
-                size: 160
+                size: 180
               )
 
               png_base64 = Base64.encode64(png.to_s)

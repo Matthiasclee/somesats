@@ -1,7 +1,7 @@
 require "net/http"
 
 class GiftCardsController < ApplicationController
-  before_action :set_gift_card, only: %i[ show pay confirm_payment ]
+  before_action :set_gift_card, only: %i[ show pay confirm_payment redeem ]
   FEE=2
 
   # GET /gift_cards/1 or /gift_cards/1.json
@@ -60,6 +60,14 @@ class GiftCardsController < ApplicationController
       redirect_to gift_card_url(@gift_card)
     else
       redirect_to gift_cards_pay_path(@gift_card)
+    end
+  end
+
+  def redeem
+    if params[:redemption_code] == @gift_card.redemption_code
+      @redemption_code = params[:redemption_code]
+    else
+      @redemption_code = nil
     end
   end
 

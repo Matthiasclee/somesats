@@ -38,4 +38,6 @@
     ₿<%= "%.8f" % (gift_card.sats.to_f/100000000) %> • <%= gift_card.sats %> sats
   </p>
 
+  <%= link_to "Redeem", gift_cards_redeem_path(gift_card) %>
+
 </div>
